@@ -1,0 +1,25 @@
+﻿@model IEnumerable<WebApplication31.Models.Course>
+
+<style type="text/css">
+img {
+  max-width: 100%;
+  display: inline-block;
+}
+    li { 
+        list-style : none;
+        display: inline-block;
+    }
+   
+</style>
+<div id="searchresults">
+    @if (Model.Count() > 0)
+    {
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>@item.Name</li>
+                <li> <img src="@Url.Content("~/Content")/@item.Photo" width="120" height="100"/></li>
+            }
+        </ul>
+    }
+</div>

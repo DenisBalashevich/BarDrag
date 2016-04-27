@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@section scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="~/lib/angular.js"></script>
+    <script type="text/javascript">
+        function dragstart_handler(ev) {
+            
+            if (ev.target.nodeName == "p")
+                ev.dataTransfer.setData("text", ev.target.id);
+            else
+                ev.dataTransfer.setData("text", ev.target.parentNode.id);
+            ev.dataTransfer.effectAllowed = "move";
+        }
+
+        function drop_handler(ev,id) {
+            ev.preventDefault();
+            var trg = document.getElementById(id);
+            var data = ev.dataTransfer.getData("text");
+            trg.appendChild(document.getElementById(data));
+            var name = data;
+            name = encodeURIComponent(name);
+            $('#results').load('@Url.Action("CocktailsHDO", "Home")?name=' + name + '&targetId=' + id);
+        }
+
+        function dragover_handler(ev) {
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = "move"
+        }
+    </script>
+}
+
+<div style="background: #ccc;" id="target2" ondrop="drop_handler(event,id);" ondragover="dragover_handler(event);">
+    Ingredients
+    <br>
+    @foreach (var a in Model)
+    {
+        <p id="@a.Id"  ondragstart="dragstart_handler(event);" draggable="true" >
+            @a.Name
+            <img src="@Url.Content("~/Content")/@a.Photo" width="120" height="100" />
+        </p>
+    }
+</div>
+
+<div style="background: #fc0;" id="target" ondrop="drop_handler(event,id);" ondragover="dragover_handler(event);">
+    <p>
+        Mix
+    </p>
+</div>
+
+<div style="background: #b6ff00;" id="result">
+    Cocktails
+    <div id="results">
+    </div>
+    <script>alert(msg.va)</script>
+</div>
+
+<style type="text/css">
+    img {
+        max-width: 100%;
+        display: inline-block;
+    }
+
+    p {
+       
+        display: inline-block;
+    }
+</style>
